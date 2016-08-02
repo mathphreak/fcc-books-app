@@ -35,7 +35,7 @@
     request.hidden = true;
     request.addEventListener('click', function () {
       ajaxFunctions.ajaxRequest('POST', appUrl + '/api/requests/' + book._id, function () {
-        console.log('Requested!'); // TODO anything ever
+        console.log('Requested!');
       });
     });
     li.appendChild(request);

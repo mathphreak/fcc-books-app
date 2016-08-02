@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var path = process.cwd();
 var BooksHandler = require(path + '/app/controllers/books-handler.server.js');
 var UserHandler = require(path + '/app/controllers/user-handler.server.js');
+var RequestsHandler = require(path + '/app/controllers/requests-handler.server.js');
 
 module.exports = function (app, passport) {
   function forceAuth(req, res, next) {
@@ -23,6 +24,7 @@ module.exports = function (app, passport) {
 
   var booksHandler = new BooksHandler();
   var userHandler = new UserHandler();
+  var reqHandler = new RequestsHandler();
 
   var formParser = bodyParser.urlencoded({extended: false});
 
@@ -68,5 +70,11 @@ module.exports = function (app, passport) {
 
   app.route('/api/books')
     .get(booksHandler.getBooks)
-    .post(forceAuth, formParser, booksHandler.addBook);
+    .post(forceAuthAPI, formParser, booksHandler.addBook);
+
+  app.route('/api/requests')
+    .get(forceAuthAPI, reqHandler.getMyRequests);
+
+  app.route('/api/requests/:book')
+    .post(forceAuthAPI, formParser, reqHandler.addRequest);
 };

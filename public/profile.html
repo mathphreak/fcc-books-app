@@ -20,10 +20,12 @@
 				<a class="menu" href="/">Home</a>
 				<p id="menu-divide">|</p>
 				<a class="menu" href="/logout">Logout</a>
+				<p id="menu-divide">|</p>
+				<a class="menu" href="#" id='profile-edit'>Edit</a>
 			</div>
 		</div>
 
-    <div class="container">
+    <div class="container" hidden>
       <form action="/api/users/me" method="post" id="profile-settings">
         <p>
           <label>
@@ -47,9 +49,16 @@
           <input type="submit" value="Save">
         </p>
       </form>
+    </div>
+
+    <div class="container">
+      <h2>Requests</h2>
+      <ul id="request-list"></ul>
+    </div>
 
 		<script type="text/javascript" src="common/ajax-functions.js"></script>
 		<script type="text/javascript" src="controllers/user-controller.client.js"></script>
+		<script type="text/javascript" src="controllers/requests-controller.client.js"></script>
 	</body>
 
 </html>

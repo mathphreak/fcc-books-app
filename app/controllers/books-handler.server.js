@@ -11,7 +11,10 @@ function BooksHandler() {
           throw err;
         }
 
-        var detailsPromises = result.map(x => x.getDetails);
+        var detailsPromises = result.map(x => x.getDetails.catch(err => {
+          console.error(err);
+          return {};
+        }));
 
         Promise.all(detailsPromises).then(details => res.json(details));
       });
@@ -31,7 +34,15 @@ function BooksHandler() {
           throw err;
         }
 
-        res.redirect('/#' + result._id);
+        result.getDetails
+          .then(() => res.redirect('/#' + result._id))
+          .catch(err => {
+            console.error(err);
+            res.sendStatus(400).end();
+            Books
+              .findOneAndRemove({_id: result._id})
+              .exec();
+          });
       });
   };
 }

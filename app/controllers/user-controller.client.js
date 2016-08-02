@@ -9,7 +9,14 @@
   var settingsForm = document.querySelector('#profile-settings') || null;
   var profileCity = document.querySelector('#profile-city') || null;
   var profileState = document.querySelector('#profile-state') || null;
+  var profileEdit = document.querySelector('#profile-edit') || null;
   var apiUrl = appUrl + '/api/users/me';
+
+  var notEditingContainer = document.querySelector('.github-profile') || null;
+  notEditingContainer = notEditingContainer ? notEditingContainer.parentNode : null;
+
+  var editingContainer = document.querySelector('#profile-settings') || null;
+  editingContainer = editingContainer ? editingContainer.parentNode : null;
 
   var authDetailedStyle = document.createElement('style');
 
@@ -54,6 +61,14 @@
     if (settingsForm !== null) {
       Array.prototype.forEach.call(settingsForm.querySelectorAll('input[type="text"]'), function (input) {
         input.value = userObject[input.name];
+      });
+    }
+
+    if (profileEdit !== null) {
+      profileEdit.addEventListener('click', function (evt) {
+        evt.preventDefault();
+        notEditingContainer.hidden = true;
+        editingContainer.hidden = false;
       });
     }
   }));
