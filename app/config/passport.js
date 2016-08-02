@@ -34,7 +34,7 @@ module.exports = function (passport) {
 
         newUser.github.id = profile.id;
         newUser.github.username = profile.username;
-        newUser.github.displayName = profile.displayName;
+        newUser.name = profile.displayName || profile.username;
 
         newUser.save(function (err) {
           if (err) {

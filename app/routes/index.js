@@ -1,20 +1,33 @@
 'use strict';
 
+var bodyParser = require('body-parser');
+
 var path = process.cwd();
-var ClickHandler = require(path + '/app/controllers/click-handler.server.js');
+var BooksHandler = require(path + '/app/controllers/books-handler.server.js');
+var UserHandler = require(path + '/app/controllers/user-handler.server.js');
 
 module.exports = function (app, passport) {
-  function isLoggedIn(req, res, next) {
+  function forceAuth(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
     }
     res.redirect('/login');
   }
 
-  var clickHandler = new ClickHandler();
+  function forceAuthAPI(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.sendStatus(403).end();
+  }
+
+  var booksHandler = new BooksHandler();
+  var userHandler = new UserHandler();
+
+  var formParser = bodyParser.urlencoded({extended: false});
 
   app.route('/')
-    .get(isLoggedIn, function (req, res) {
+    .get(function (req, res) {
       res.sendFile(path + '/public/index.html');
     });
 
@@ -30,14 +43,19 @@ module.exports = function (app, passport) {
     });
 
   app.route('/profile')
-    .get(isLoggedIn, function (req, res) {
+    .get(forceAuth, function (req, res) {
       res.sendFile(path + '/public/profile.html');
     });
 
-  app.route('/api/:id')
-    .get(isLoggedIn, function (req, res) {
-      res.json(req.user.github);
-    });
+  app.route('/api/users/me')
+    .get(function (req, res) {
+      if (req.isAuthenticated()) {
+        res.json(req.user);
+      } else {
+        res.json(false);
+      }
+    })
+    .post(forceAuthAPI, formParser, userHandler.saveSettings);
 
   app.route('/auth/github')
     .get(passport.authenticate('github'));
@@ -48,8 +66,7 @@ module.exports = function (app, passport) {
       failureRedirect: '/login'
     }));
 
-  app.route('/api/:id/clicks')
-    .get(isLoggedIn, clickHandler.getClicks)
-    .post(isLoggedIn, clickHandler.addClick)
-    .delete(isLoggedIn, clickHandler.resetClicks);
+  app.route('/api/books')
+    .get(booksHandler.getBooks)
+    .post(forceAuth, formParser, booksHandler.addBook);
 };

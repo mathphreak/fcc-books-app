@@ -5,33 +5,56 @@
 (function () {
   var profileId = document.querySelector('#profile-id') || null;
   var profileUsername = document.querySelector('#profile-username') || null;
-  var profileRepos = document.querySelector('#profile-repos') || null;
   var displayName = document.querySelector('#display-name');
-  var apiUrl = appUrl + '/api/:id';
+  var settingsForm = document.querySelector('#profile-settings') || null;
+  var profileCity = document.querySelector('#profile-city') || null;
+  var profileState = document.querySelector('#profile-state') || null;
+  var apiUrl = appUrl + '/api/users/me';
+
+  var authDetailedStyle = document.createElement('style');
 
   function updateHtmlElement(data, element, userProperty) {
     element.innerHTML = data[userProperty];
   }
 
   ajaxFunctions.ready(ajaxFunctions.ajaxRequest('GET', apiUrl, function (data) {
+    document.body.appendChild(authDetailedStyle);
+
     var userObject = JSON.parse(data);
 
-    if (userObject.displayName === null) {
-      updateHtmlElement(userObject, displayName, 'username');
+    if (userObject === false) {
+      return;
+    }
+
+    authDetailedStyle.sheet.insertRule('.auth-hidden {display: none;}', 0);
+    authDetailedStyle.sheet.insertRule('.auth-shown {display: unset;}', 0);
+
+    if (userObject.name === null) {
+      updateHtmlElement(userObject.github, displayName, 'username');
     } else {
-      updateHtmlElement(userObject, displayName, 'displayName');
+      updateHtmlElement(userObject, displayName, 'name');
     }
 
     if (profileId !== null) {
-      updateHtmlElement(userObject, profileId, 'id');
+      updateHtmlElement(userObject.github, profileId, 'id');
     }
 
     if (profileUsername !== null) {
-      updateHtmlElement(userObject, profileUsername, 'username');
+      updateHtmlElement(userObject.github, profileUsername, 'username');
     }
 
-    if (profileRepos !== null) {
-      updateHtmlElement(userObject, profileRepos, 'publicRepos');
+    if (profileCity !== null) {
+      updateHtmlElement(userObject, profileCity, 'city');
+    }
+
+    if (profileState !== null) {
+      updateHtmlElement(userObject, profileState, 'state');
+    }
+
+    if (settingsForm !== null) {
+      Array.prototype.forEach.call(settingsForm.querySelectorAll('input[type="text"]'), function (input) {
+        input.value = userObject[input.name];
+      });
     }
   }));
 })();

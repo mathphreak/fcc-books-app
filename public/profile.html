@@ -3,8 +3,8 @@
 <html>
 
 	<head>
-		<title>Clementine.js - The elegant and lightweight full stack JavaScript boilerplate.</title>
-		
+		<title>fcc-books-app</title>
+
 		<link href="/public/css/main.css" rel="stylesheet" type="text/css">
 	</head>
 
@@ -14,16 +14,42 @@
 				<img src="/public/img/gh-mark-32px.png" alt="github logo" />
 				<p><span>ID: </span><span id="profile-id" class="profile-value"></span></p>
 				<p><span>Username: </span><span id="profile-username" class="profile-value"></span></p>
-				<p><span>Display Name: </span><span id="display-name" class="profile-value"></span></p>
-				<p><span>Repositories: </span><span id="profile-repos" class="profile-value"></span></p>
+				<p><span>Name: </span><span id="display-name" class="profile-value"></span></p>
+				<p><span>City: </span><span id="profile-city" class="profile-value"></span></p>
+				<p><span>State: </span><span id="profile-state" class="profile-value"></span></p>
 				<a class="menu" href="/">Home</a>
 				<p id="menu-divide">|</p>
 				<a class="menu" href="/logout">Logout</a>
 			</div>
 		</div>
-		
+
+    <div class="container">
+      <form action="/api/users/me" method="post" id="profile-settings">
+        <p>
+          <label>
+            Name
+            <input type="text" name="name">
+          </label>
+        </p>
+        <p>
+          <label>
+            City
+            <input type="text" name="city">
+          </label>
+        </p>
+        <p>
+          <label>
+            State
+            <input type="text" name="state">
+          </label>
+        </p>
+        <p>
+          <input type="submit" value="Save">
+        </p>
+      </form>
+
 		<script type="text/javascript" src="common/ajax-functions.js"></script>
-		<script type="text/javascript" src="controllers/userController.client.js"></script>
+		<script type="text/javascript" src="controllers/user-controller.client.js"></script>
 	</body>
 
 </html>

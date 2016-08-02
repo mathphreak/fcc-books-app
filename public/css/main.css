@@ -64,7 +64,7 @@ header p {
 	color: #FF630D;
 }
 
-header a ~ p {
+header a ~ p:not([hidden]) {
 	margin: 0;
 	padding: 0;
 	display: inline;
@@ -155,7 +155,7 @@ img {
 
 .github-profile {
 	width: 350px;
-	height: 200px;
+	height: 250px;
 	border-radius: 3px;
 	margin: 86px auto 0 auto;
 	background-color: #EEE;
@@ -167,7 +167,7 @@ img {
 	padding-top: 16px;
 }
 
-.github-profile p:nth-child(5) {
+.github-profile p:nth-child(6) {
 	margin-bottom: 16px
 }
 
@@ -178,10 +178,6 @@ img {
 
 .profile-value {
 	font-weight: 400;
-}
-
-span {
-	font-weight: 500;
 }
 
 .github-profile > img {
@@ -201,4 +197,20 @@ span {
 	color: #FFFFFF;
 	display: inline;
 	margin: 0;
+}
+
+/* Misc Styling */
+
+#add-book :invalid {
+  border: 2px solid red;
+}
+
+.book .cover {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 1em;
+}
+
+.book .title {
+  font-weight: bold;
 }
